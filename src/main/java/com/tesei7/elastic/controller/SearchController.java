@@ -1,4 +1,4 @@
-package com.tesei7.elastic.resource;
+package com.tesei7.elastic.controller;
 
 import com.tesei7.elastic.model.User;
 import com.tesei7.elastic.repository.UsersRepository;

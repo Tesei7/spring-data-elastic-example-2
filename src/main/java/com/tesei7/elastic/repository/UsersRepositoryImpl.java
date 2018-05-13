@@ -23,10 +23,10 @@ public class UsersRepositoryImpl implements UsersRepositoryCustomized {
     @Override
     public List<User> getAll(String text) {
         QueryBuilder query = boolQuery()
-                .should(queryStringQuery(text).lenient(true)
+                .should(queryStringQuery(text)
                         .field("name")
-                        .field("teamName")
-                ).should(queryStringQuery("*" + text + "*").lenient(true)
+                        .field("teamName"))
+                .should(queryStringQuery("*" + text + "*")
                         .field("name")
                         .field("teamName"));
         NativeSearchQuery build = new NativeSearchQueryBuilder().withQuery(query).build();
