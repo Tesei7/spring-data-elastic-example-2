@@ -28,6 +28,11 @@ public class SearchController {
         return usersRepository.findBySalary(salary);
     }
 
+    @GetMapping("/salary/greater/{salary}")
+    public List<User> searchSalaryMoreThan(@PathVariable final Long salary) {
+        return usersRepository.findSalaryGreater(salary);
+    }
+
     @GetMapping("/all")
     public List<User> searchAll() {
         return StreamSupport.stream(usersRepository.findAll().spliterator(), false).collect(Collectors.toList());

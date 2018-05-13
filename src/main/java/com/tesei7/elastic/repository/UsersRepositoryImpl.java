@@ -2,7 +2,6 @@ package com.tesei7.elastic.repository;
 
 import com.tesei7.elastic.model.User;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -12,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
 @Repository
 @Transactional(readOnly = true)
 public class UsersRepositoryImpl implements UsersRepositoryCustomized {
@@ -20,11 +22,11 @@ public class UsersRepositoryImpl implements UsersRepositoryCustomized {
 
     @Override
     public List<User> getAll(String text) {
-        QueryBuilder query = QueryBuilders.boolQuery()
-                .should(QueryBuilders.queryStringQuery(text).lenient(true)
+        QueryBuilder query = boolQuery()
+                .should(queryStringQuery(text).lenient(true)
                         .field("name")
                         .field("teamName")
-                ).should(QueryBuilders.queryStringQuery("*" + text + "*").lenient(true)
+                ).should(queryStringQuery("*" + text + "*").lenient(true)
                         .field("name")
                         .field("teamName"));
         NativeSearchQuery build = new NativeSearchQueryBuilder().withQuery(query).build();
