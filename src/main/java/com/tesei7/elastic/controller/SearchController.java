@@ -33,6 +33,11 @@ public class SearchController {
         return usersRepository.findSalaryGreater(salary);
     }
 
+    @GetMapping("/salary/range/{from}/{to}")
+    public List<User> searchSalaryRange(@PathVariable final Long from, @PathVariable final Long to) {
+        return usersRepository.findSalaryRange(from, to);
+    }
+
     @GetMapping("/all")
     public List<User> searchAll() {
         return StreamSupport.stream(usersRepository.findAll().spliterator(), false).collect(Collectors.toList());

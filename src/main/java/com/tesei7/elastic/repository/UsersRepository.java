@@ -11,6 +11,18 @@ public interface UsersRepository extends UsersRepositoryCustomized, Elasticsearc
 
     List<User> findBySalary(Long salary);
 
-    @Query("{\"bool\" : {\"must\" : {\"range\" : {\"salary\" : {\"from\" : \"?0\", \"to\" : null}}}}}")
+    @Query("{\"range\" : {" +
+            "   \"salary\" : {" +
+            "       \"gte\" : \"?0\"" +
+            "   }" +
+            "}}")
     List<User> findSalaryGreater(Long value);
+
+    @Query("{\"range\" : {" +
+            "   \"salary\" : {" +
+            "       \"gte\" : \"?0\"," +
+            "       \"lte\" : \"?1\"" +
+            "   }" +
+            "}}")
+    List<User> findSalaryRange(Long from, Long to);
 }
