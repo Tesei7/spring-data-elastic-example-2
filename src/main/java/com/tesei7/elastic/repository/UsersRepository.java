@@ -25,4 +25,9 @@ public interface UsersRepository extends UsersRepositoryCustomized, Elasticsearc
             "   }" +
             "}}")
     List<User> findSalaryRange(Long from, Long to);
+
+    @Query("{\"term\" : {" +
+            "   \"teamName\" : \"?0\"" +
+            "}}")
+    List<User> findByTeam(String teamName);
 }

@@ -23,6 +23,11 @@ public class SearchController {
         return usersRepository.findByName(text);
     }
 
+    @GetMapping("/team/{team}")
+    public List<User> searchTeam(@PathVariable final String team) {
+        return usersRepository.findByTeam(team);
+    }
+
     @GetMapping("/salary/{salary}")
     public List<User> searchSalary(@PathVariable final Long salary) {
         return usersRepository.findBySalary(salary);
