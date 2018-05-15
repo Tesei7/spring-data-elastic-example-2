@@ -52,4 +52,9 @@ public class SearchController {
     public List<User> getAll(@PathVariable final String text) {
         return usersRepository.getAll(text);
     }
+
+    @GetMapping("/projects/{project}")
+    public List<User> searchProject(@PathVariable final String project) {
+        return usersRepository.findByProjects(project);
+    }
 }

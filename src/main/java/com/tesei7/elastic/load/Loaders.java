@@ -1,5 +1,6 @@
 package com.tesei7.elastic.load;
 
+import com.tesei7.elastic.model.Project;
 import com.tesei7.elastic.model.User;
 import com.tesei7.elastic.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +10,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
 
 @Component
 @Slf4j
@@ -31,15 +37,33 @@ public class Loaders {
     }
 
     private List<User> getData() {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Project library = Project.builder().name("Library").description("Library project with books, authors, etc.")
+                .startDate(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(zoneId).toInstant()))
+                .endDate(Date.from(LocalDate.now().plusMonths(1).atStartOfDay(zoneId).toInstant())).build();
+        Project zoo = Project.builder().name("Zoo").description("Zoo project with animals.")
+                .startDate(Date.from(LocalDate.now().minusYears(1).atStartOfDay(zoneId).toInstant()))
+                .endDate(Date.from(LocalDate.now().plusMonths(1).plusDays(10).atStartOfDay(zoneId).toInstant())).build();
+        Project linux = Project.builder().name("Linux").description("Linux kernel project.")
+                .startDate(Date.from(LocalDate.now().minusYears(20).atStartOfDay(zoneId).toInstant()))
+                .endDate(Date.from(LocalDate.now().plusYears(10).plusDays(7).atStartOfDay(zoneId).toInstant())).build();
         return Stream.of(
-                new User(1L, "Ilia", "Accounting Department", 12000L),
-                new User(2L, "Leonid", "Accounting Department", 12000L),
-                new User(3L, "Anton", "Finance Department", 22000L),
-                new User(4L, "Nikolay", "Tech Department", 21000L),
-                new User(5L, "Andrey", "Tech Department", 21000L),
-                new User(6L, "Dmitriy", "Accounting Department", 21000L),
-                new User(7L, "Ivan", "Tech Department", 22000L),
-                new User(8L, "Boris", "Accounting Department", 12000L))
+                User.builder().id(1L).name("Ilia").teamName("Accounting Department").salary(25000L)
+                        .projects(asList(library, zoo, linux)).build(),
+                User.builder().id(2L).name("Leonid").teamName("Accounting Department").salary(12000L)
+                        .projects(asList(linux)).build(),
+                User.builder().id(3L).name("Anton").teamName("Finance Department").salary(22000L)
+                        .projects(asList(library, zoo)).build(),
+                User.builder().id(4L).name("Nikolay").teamName("Tech Department").salary(21000L)
+                        .projects(asList(zoo, linux)).build(),
+                User.builder().id(5L).name("Andrey").teamName("Tech Department").salary(17000L)
+                        .projects(asList(zoo)).build(),
+                User.builder().id(6L).name("Dmitriy").teamName("Accounting Department")
+                        .salary(21000L).projects(asList(library)).build(),
+                User.builder().id(7L).name("Ivan").teamName("Tech Department").salary(22000L)
+                        .projects(asList(library, zoo)).build(),
+                User.builder().id(8L).name("Boris").teamName("Accounting Department").salary(12000L)
+                        .projects(asList(library, linux)).build())
                 .collect(Collectors.toList());
     }
 }

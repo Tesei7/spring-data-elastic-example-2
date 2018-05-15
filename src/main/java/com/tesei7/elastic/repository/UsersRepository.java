@@ -30,4 +30,12 @@ public interface UsersRepository extends UsersRepositoryCustomized, Elasticsearc
             "   \"teamName\" : \"?0\"" +
             "}}")
     List<User> findByTeam(String teamName);
+
+    @Query(" {\"nested\" : {" +
+            "    \"path\" : \"projects\"," +
+            "    \"query\" : {" +
+            "       \"match\" : { \"projects.name\" : \"?0\" }" +
+            "    }" +
+            "}}")
+    List<User> findByProjects(String project);
 }
