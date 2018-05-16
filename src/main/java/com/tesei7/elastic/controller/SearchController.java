@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -41,6 +42,11 @@ public class SearchController {
     @GetMapping("/salary/range/{from}/{to}")
     public List<User> searchSalaryRange(@PathVariable final Long from, @PathVariable final Long to) {
         return usersRepository.findSalaryRange(from, to);
+    }
+
+    @GetMapping("/salary/rangeHidden/{from}/{to}")
+    public List<Map<String, Object>> searchSalaryHiddenRange(@PathVariable final Long from, @PathVariable final Long to) {
+        return usersRepository.getSalaryRangeHidden(from, to);
     }
 
     @GetMapping("/all")
