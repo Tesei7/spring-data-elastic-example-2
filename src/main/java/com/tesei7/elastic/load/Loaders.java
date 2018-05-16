@@ -37,16 +37,18 @@ public class Loaders {
     }
 
     private List<User> getData() {
-        ZoneId zoneId = ZoneId.systemDefault();
         Project library = Project.builder().name("Library").description("Library project with books, authors, etc.")
-                .startDate(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(zoneId).toInstant()))
-                .endDate(Date.from(LocalDate.now().plusMonths(1).atStartOfDay(zoneId).toInstant())).build();
+                .startDate(toDate(LocalDate.now().minusMonths(1)))
+                .endDate(toDate(LocalDate.now().plusMonths(1))).build();
         Project zoo = Project.builder().name("Zoo").description("Zoo project with animals.")
-                .startDate(Date.from(LocalDate.now().minusYears(1).atStartOfDay(zoneId).toInstant()))
-                .endDate(Date.from(LocalDate.now().plusMonths(1).plusDays(10).atStartOfDay(zoneId).toInstant())).build();
+                .startDate(toDate(LocalDate.now().minusYears(1)))
+                .endDate(toDate(LocalDate.now().plusMonths(1).plusDays(10))).build();
         Project linux = Project.builder().name("Linux").description("Linux kernel project.")
-                .startDate(Date.from(LocalDate.now().minusYears(20).atStartOfDay(zoneId).toInstant()))
-                .endDate(Date.from(LocalDate.now().plusYears(10).plusDays(7).atStartOfDay(zoneId).toInstant())).build();
+                .startDate(toDate(LocalDate.now().minusYears(20)))
+                .endDate(toDate(LocalDate.now().plusYears(10).plusDays(7))).build();
+        Project legacy = Project.builder().name("Legacy").description("Legacy project.")
+                .startDate(toDate(LocalDate.now().minusYears(20)))
+                .endDate(toDate(LocalDate.now().minusYears(10).plusDays(7))).build();
         return Stream.of(
                 User.builder().id(1L).name("Ilia").teamName("Accounting Department").salary(25000L)
                         .projects(asList(library, zoo, linux)).build(),
@@ -58,12 +60,16 @@ public class Loaders {
                         .projects(asList(zoo, linux)).build(),
                 User.builder().id(5L).name("Andrey").teamName("Tech Department").salary(17000L)
                         .projects(asList(zoo)).build(),
-                User.builder().id(6L).name("Dmitriy").teamName("Accounting Department")
-                        .salary(21000L).projects(asList(library)).build(),
+                User.builder().id(6L).name("Dmitriy").teamName("Accounting Department").salary(21000L)
+                        .projects(asList(library)).build(),
                 User.builder().id(7L).name("Ivan").teamName("Tech Department").salary(22000L)
-                        .projects(asList(library, zoo)).build(),
+                        .projects(asList(library, zoo, legacy)).build(),
                 User.builder().id(8L).name("Boris").teamName("Accounting Department").salary(12000L)
-                        .projects(asList(library, linux)).build())
+                        .projects(asList(library, linux, legacy)).build())
                 .collect(Collectors.toList());
+    }
+
+    private Date toDate(LocalDate date) {
+        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

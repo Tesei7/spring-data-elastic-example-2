@@ -57,4 +57,9 @@ public class SearchController {
     public List<User> searchProject(@PathVariable final String project) {
         return usersRepository.findByProjects(project);
     }
+
+    @GetMapping("/projects/past/{salary}")
+    public List<User> searchWithNonactiveProjectAndSalaryLess(@PathVariable final Long salary) {
+        return usersRepository.findWithNonactiveProjectAndSalaryLess(salary);
+    }
 }

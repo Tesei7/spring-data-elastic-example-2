@@ -38,4 +38,31 @@ public interface UsersRepository extends UsersRepositoryCustomized, Elasticsearc
             "    }" +
             "}}")
     List<User> findByProjects(String project);
+
+    @Query("{" +
+            "    \"query\": {" +
+            "        \"bool\": {" +
+            "            \"must\": [{" +
+            "                    \"range\": {" +
+            "                        \"salary\": {" +
+            "                            \"lte\": \"?0\"" +
+            "                        }" +
+            "                    }" +
+            "                }, {" +
+            "                    \"nested\": {" +
+            "                        \"path\": \"projects\"," +
+            "                        \"query\": {" +
+            "                            \"range\": {" +
+            "                                \"projects.endDate\": {" +
+            "                                    \"lt\": \"now/d\"" +
+            "                                }" +
+            "                            }" +
+            "                        }" +
+            "                    }" +
+            "                }" +
+            "            ]" +
+            "        }" +
+            "    }" +
+            "}")
+    List<User> findWithNonactiveProjectAndSalaryLess(Long salary);
 }
